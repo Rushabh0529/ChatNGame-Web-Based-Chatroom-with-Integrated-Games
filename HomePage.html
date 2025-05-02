@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatNGame - Trivia & Maths Puzzle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: url('https://source.unsplash.com/1600x900/?gaming') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .glassmorphism {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .chatbox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            max-height: 250px;
+            overflow-y: scroll;
+            padding: 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 300px;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            color: #dcdcdc;
+        }
+
+        .button-glow {
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
+        }
+
+        .button-glow:hover {
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .countdown {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ff4d4d;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+
+        .question-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #ecf0f1;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+
+        .option-button {
+            background: linear-gradient(90deg, #ff7b00, #ff4c00);
+            color: white;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .option-button:hover {
+            background-color: #e44d00;
+            transform: scale(1.05);
+        }
+        
+        .redirect-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .redirect-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen">
+    <header class="text-center mb-8 bg-black bg-opacity-50 p-6 rounded-lg glassmorphism">
+        <h1 class="text-5xl font-extrabold tracking-wide">ChatNGame - Trivia & Maths Puzzle</h1>
+        <p class="text-xl text-gray-300 mt-2">Play trivia, maths puzzles, and chat with others!</p>
+    </header>
+    <!-- Redirect Button -->
+    <button class="redirect-button" onclick="window.location.href='Admin.html'">
+        Admin Page
+    </button>
+
+    <main class="w-full max-w-md p-8 glassmorphism text-center">
+        <section id="nickname-section" class="mb-6">
+            <label for="nickname" class="block text-lg mb-3 font-semibold">Enter your nickname:</label>
+            <input type="text" id="nickname" class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg" placeholder="Your nickname...">
+        </section>
+        
+        <button id="submitnickname" class="w-full py-3 bg-teal-500 hover:bg-teal-600 rounded-lg transition text-lg font-semibold button-glow">Submit</button>
+        
+        <div id="new-game-tab" class="mt-6 hidden">
+            <h2 class="text-2xl font-semibold">Welcome to the game, <span id="display-nickname"></span>!</h2>
+            <button id="startTriviaGame" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg transition text-lg font-semibold button-glow">Start Trivia Game</button>
+            <button id="startMathsPuzzleGame" class="w-full py-3 mt-4 bg-orange-600 hover:bg-orange-700 rounded-lg transition text-lg font-semibold button-glow">Start Maths Puzzle Game</button>
+            <button id="joinChatroom" class="w-full py-3 mt-4 bg-green-600 hover:bg-green-700 rounded-lg transition text-lg font-semibold button-glow">Join Chatroom</button>
+        </div>
+
+        <div id="trivia-section" class="hidden">
+            <div id="countdown" class="countdown mb-4">Time left: 15s</div>
+            <p id="question" class="question-title">Loading trivia question...</p>
+            <div id="options" class="space-y-4"></div>
+            <button id="nextQuestion" class="w-full py-3 mt-6 bg-teal-500 hover:bg-teal-600 rounded-lg transition text-lg font-semibold hidden button-glow">Next Question</button>
+            <p id="score" class="mt-4 text-lg">Score: 0/10</p>
+        </div>
+
+        <div id="maths-puzzle-section" class="hidden">
+            <div id="maths-countdown" class="countdown mb-4">Time left: 15s</div>
+            <p id="maths-puzzle-question" class="question-title">Loading maths puzzle...</p>
+            <div id="maths-options" class="space-y-4 mt-4"></div>
+            <p id="maths-puzzle-score" class="mt-4 text-lg">Score: 0/10</p>
+        </div>
+    </main>
+
+    <!-- Chat box, initially hidden -->
+    <div id="chatBox" class="chatbox hidden">
+        <div id="messages"></div>
+        <input type="text" id="chatMessage" class="w-full p-2 mt-2 bg-gray-700 text-white rounded-lg" placeholder="Type a message..." />
+        <button id="sendMessage" class="w-full py-2 mt-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition text-lg font-semibold button-glow">Send Message</button>
+    </div>
+
+    <script>
+        // Trivia game variables
+        const triviaQuestions = [
+            { question: "What is the capital of France?", options: ["Paris", "Berlin", "Madrid", "Rome"], answer: "Paris" },
+            { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: "Mars" },
+            { question: "Who wrote 'Harry Potter'?", options: ["J.K. Rowling", "J.R.R. Tolkien", "George R.R. Martin", "C.S. Lewis"], answer: "J.K. Rowling" },
+            { question: "What is the largest ocean on Earth?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: "Pacific" },
+            { question: "Which country is the largest by area?", options: ["Canada", "USA", "Russia", "China"], answer: "Russia" },
+            { question: "Who painted the Mona Lisa?", options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"], answer: "Leonardo da Vinci" },
+            { question: "What is the smallest continent?", options: ["Australia", "Africa", "Europe", "Asia"], answer: "Australia" },
+            { question: "Who invented the telephone?", options: ["Alexander Graham Bell", "Thomas Edison", "Nikola Tesla", "Elon Musk"], answer: "Alexander Graham Bell" },
+            { question: "Which element has the chemical symbol 'O'?", options: ["Oxygen", "Gold", "Osmium", "Ozone"], answer: "Oxygen" },
+            { question: "What is the hardest natural substance on Earth?", options: ["Gold", "Diamond", "Iron", "Platinum"], answer: "Diamond" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let triviaScore = 0;
+        let mathsPuzzleScore = 0;
+        let nickname = "";
+        let triviaTimer = 15;
+        let mathsTimer = 15;
+
+        // Maths puzzle game variables
+        const mathsQuestions = [
+            { question: "5 + 3", options: [6, 7, 8, 9], answer: 8 },
+            { question: "10 - 7", options: [1, 2, 3, 4], answer: 3 },
+            { question: "4 * 6", options: [18, 20, 22, 24], answer: 24 },
+            { question: "15 / 3", options: [3, 4, 5, 6], answer: 5 },
+            { question: "9 + 6", options: [12, 13, 14, 15], answer: 15 }
+        ];
+
+        // Handle nickname submission
+        document.getElementById("submitnickname").addEventListener("click", () => {
+            nickname = document.getElementById("nickname").value.trim();
+            if (nickname) {
+                sessionStorage.setItem("nickname", nickname); //Store nickname in sessionStorage
+                document.getElementById("nickname-section").classList.add("hidden"); // Hide nickname input section
+                document.getElementById("submitnickname").classList.add("hidden"); // Hide submit button
+                document.getElementById("display-nickname").textContent = nickname;
+                document.getElementById("new-game-tab").classList.remove("hidden");
+            }
+        });
+
+        // Handle game start
+        document.getElementById("startTriviaGame").addEventListener("click", () => {
+            startTriviaGame();
+        });
+
+        document.getElementById("startMathsPuzzleGame").addEventListener("click", () => {
+            startMathsPuzzleGame();
+        });
+        
+        document.getElementById("joinChatroom").addEventListener("click", () => {
+        window.location.href = "chatroom.php";
+        });
+
+        // Start trivia game
+        function startTriviaGame() {
+            document.getElementById("new-game-tab").classList.add("hidden");
+            document.getElementById("trivia-section").classList.remove("hidden");
+            startTriviaTimer();
+            loadTriviaQuestion();
+            document.getElementById("chatBox").classList.remove("hidden");  // Show chat box when game starts
+        }
+
+        // Start maths puzzle game
+        function startMathsPuzzleGame() {
+            document.getElementById("new-game-tab").classList.add("hidden");
+            document.getElementById("maths-puzzle-section").classList.remove("hidden");
+            startMathsPuzzleTimer();
+            loadMathsPuzzle();
+            document.getElementById("chatBox").classList.remove("hidden");  // Show chat box when game starts
+        }
+
+        // Start trivia timer
+        function startTriviaTimer() {
+            const countdownInterval = setInterval(() => {
+                triviaTimer--;
+                document.getElementById("countdown").textContent = `Time left: ${triviaTimer}s`;
+
+                if (triviaTimer <= 0) {
+                    clearInterval(countdownInterval);
+                    loadNextQuestion();
+                }
+            }, 1000);
+        }
+
+        // Load trivia question
+        function loadTriviaQuestion() {
+            const question = triviaQuestions[currentQuestionIndex];
+            document.getElementById("question").textContent = question.question;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = "";
+            question.options.forEach(option => {
+                const optionButton = document.createElement("button");
+                optionButton.textContent = option;
+                optionButton.classList.add("option-button", "w-full", "py-2", "rounded-lg");
+                optionButton.addEventListener("click", () => checkTriviaAnswer(option));
+                optionsDiv.appendChild(optionButton);
+            });
+        }
+
+        // Check trivia answer
+        function checkTriviaAnswer(selectedAnswer) {
+            const correctAnswer = triviaQuestions[currentQuestionIndex].answer;
+            if (selectedAnswer === correctAnswer) {
+                triviaScore++;
+                document.getElementById("score").textContent = `Score: ${triviaScore}`;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < triviaQuestions.length) {
+                loadTriviaQuestion();
+            } else {
+                endTriviaGame();
+            }
+        }
+
+        // End trivia game
+        function endTriviaGame() {
+            document.getElementById("trivia-section").classList.add("hidden");
+            alert(`Trivia Game Over! Your score: ${triviaScore}`);
+            resetTriviaGame();
+        }
+
+        // Reset trivia game
+        function resetTriviaGame() {
+            currentQuestionIndex = 0;
+            triviaScore = 0;
+        }
+
+        // Start maths puzzle timer
+        function startMathsPuzzleTimer() {
+            const countdownInterval = setInterval(() => {
+                mathsTimer--;
+                document.getElementById("maths-countdown").textContent = `Time left: ${mathsTimer}s`;
+
+                if (mathsTimer <= 0) {
+                    clearInterval(countdownInterval);
+                    loadMathsPuzzle();
+                }
+            }, 1000);
+        }
+
+        // Load maths puzzle
+        function loadMathsPuzzle() {
+            const question = mathsQuestions[currentQuestionIndex];
+            document.getElementById("maths-puzzle-question").textContent = question.question;
+            const optionsDiv = document.getElementById("maths-options");
+            optionsDiv.innerHTML = "";
+            question.options.forEach(option => {
+                const optionButton = document.createElement("button");
+                optionButton.textContent = option;
+                optionButton.classList.add("option-button", "w-full", "py-2", "rounded-lg");
+                optionButton.addEventListener("click", () => checkMathsAnswer(option));
+                optionsDiv.appendChild(optionButton);
+            });
+        }
+
+        // Check maths answer
+        function checkMathsAnswer(selectedAnswer) {
+            const correctAnswer = mathsQuestions[currentQuestionIndex].answer;
+            if (selectedAnswer === correctAnswer) {
+                mathsPuzzleScore++;
+                document.getElementById("maths-puzzle-score").textContent = `Score: ${mathsPuzzleScore}`;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < mathsQuestions.length) {
+                loadMathsPuzzle();
+            } else {
+                endMathsPuzzleGame();
+            }
+        }
+
+        // End maths puzzle game
+        function endMathsPuzzleGame() {
+            document.getElementById("maths-puzzle-section").classList.add("hidden");
+            alert(`Maths Puzzle Game Over! Your score: ${mathsPuzzleScore}`);
+            resetMathsPuzzleGame();
+        }
+
+        // Reset maths puzzle game
+        function resetMathsPuzzleGame() {
+            currentQuestionIndex = 0;
+            mathsPuzzleScore = 0;
+        }
+
+        // Handle chat functionality
+        document.getElementById("sendMessage").addEventListener("click", () => {
+            const messageInput = document.getElementById("chatMessage");
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessageToChat("You: " + message);
+                messageInput.value = "";
+            }
+        });
+
+        // Add message to chat
+        function addMessageToChat(message) {
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("chat-message");
+            messageDiv.textContent = message;
+            document.getElementById("messages").appendChild(messageDiv);
+        }
+    </script>
+</body>
+</html>

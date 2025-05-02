@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-image: url('ChatNGameThumbnail.png');
+    background-size: cover;
+    background-position: center;
+}
+
+header {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    text-align: right;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+    color: white;
+}
+
+.tagline {
+    font-size: 14px;
+    color: white;
+}
+
+.nicknamesection {
+    margin-top: 40vh;
+}
+
+label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.enterbutton {
+    display: block;
+    margin: 40px auto;
+    padding: 15px 30px;
+    font-size: 20px;
+    cursor: pointer;
+}

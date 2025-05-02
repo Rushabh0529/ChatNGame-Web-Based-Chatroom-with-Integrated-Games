@@ -1,0 +1,156 @@
+   body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1c1c1c; /* Dark background */
+            margin: 0;
+            padding: 0;
+            color: #e0e0e0; /* Light grey text for contrast */
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: linear-gradient(135deg, #3b3b3b, #4a4a4a); /* Dark gradient background */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Deeper shadow for depth */
+        }
+
+        h2 {
+            text-align: center;
+            color: #76ff03; /* Neon green text */
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        #chat-box {
+            border: 1px solid #444; /* Darker border */
+            background-color: #2a2a2a; /* Slightly lighter background for chat box */
+            height: 350px;
+            overflow-y: auto;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Soft inner shadow */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #chat-box p {
+            margin: 10px 0;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            font-size: 16px;
+            background-color: #333;
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: #76ff03; /* Neon green focus */
+            box-shadow: 0 0 5px rgba(118, 255, 3, 0.5);
+        }
+
+        .chat-input button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background-color: #76ff03; /* Neon green button */
+            color: #1c1c1c;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background-color: #4caf50; /* Green hover effect */
+            transform: translateY(-2px); /* Button lift effect */
+        }
+
+        .game-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .game-nav button {
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .game-nav button:nth-child(1) {
+            background-color: #8e24aa; /* Purple */
+            color: #fff;
+        }
+        .game-nav button:nth-child(1):hover {
+            background-color: #7b1fa2; /* Darker purple */
+        }
+
+        .game-nav button:nth-child(2) {
+            background-color: #28a745; /* Green */
+            color: #fff;
+        }
+        .game-nav button:nth-child(2):hover {
+            background-color: #218838; /* Darker green */
+        }
+
+        .game-nav button:nth-child(3) {
+            background-color: #ff5722; /* Red */
+            color: #fff;
+        }
+        .game-nav button:nth-child(3):hover {
+            background-color: #e64a19; /* Darker red */
+        }
+
+        .game-nav button:nth-child(4) {
+            background-color: #6f42c1; /* Violet */
+            color: #fff;
+        }
+        .game-nav button:nth-child(4):hover {
+            background-color: #563d7c; /* Darker violet */
+        }
+
+        .game-nav button:nth-child(5) {
+            background-color: #f0ad4e; /* Amber */
+            color: #fff;
+        }
+        .game-nav button:nth-child(5):hover {
+            background-color: #ec971f; /* Darker amber */
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
